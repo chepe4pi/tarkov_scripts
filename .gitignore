@@ -208,3 +208,5 @@ dmypy.json
 .idea/modules.xml
 .idea/tarkov_scripts.iml
 .idea/vcs.xml
+
+/db
