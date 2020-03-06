@@ -26,7 +26,7 @@ class CounterException(Exception):
     pass
 
 
-def parse_items(items, path, path_to_inventory, inventory):
+def parse_items(items, path, inventory, bot_name):
     global counter
 
     for item in items:
@@ -37,7 +37,7 @@ def parse_items(items, path, path_to_inventory, inventory):
             if tpl not in tpl_to_object.keys():
                 driver.get(url)
                 p_element = driver.find_element_by_class_name(name='ant-divider-inner-text')
-                name = str(p_element.text).split(':')[1].strip().replace('/', '-').replace("\\", "-").lstrip('А')
+                name = str(p_element.text).split(':')[1].strip().replace('/', '-').replace("\\", "-").replace('А', 'A')
                 tpl_to_object[tpl] = name
             else:
                 name = tpl_to_object[tpl]
@@ -45,10 +45,12 @@ def parse_items(items, path, path_to_inventory, inventory):
             new_path = os.path.join(path, name)
             if not os.path.exists(new_path):
                 os.mkdir(new_path)
-            new_path_to_inventory = os.path.join(new_path, inventory)
+            new_inventory_name = bot_name + "_" + inventory
+            path_to_inventory = os.path.join(path, inventory)
+            new_path_to_inventory = os.path.join(new_path, new_inventory_name)
             if not os.path.exists(new_path_to_inventory):
                 shutil.copyfile(path_to_inventory, new_path_to_inventory)
-                new_objects_paths[inventory] = new_path_to_inventory
+                new_objects_paths[new_inventory_name] = new_path_to_inventory
 
             counter += 1
 
@@ -70,11 +72,11 @@ def create_tpl_to_obj_map():
             try:
                 try:
                     items = inv_obj['items']
-                    parse_items(items, path, path_to_inventory, inventory)
+                    parse_items(items, path, inventory, bot_dir)
                 except TypeError:
                     for items_all in inv_obj:
                         items = items_all['items']
-                        parse_items(items, path, path_to_inventory, inventory)
+                        parse_items(items, path, inventory, bot_dir)
             except CounterException:
                 return
 
