@@ -63,8 +63,6 @@ def create_tpl_to_obj_map():
     for bot_dir in os.listdir(BOT_DIRS):
         path = os.path.join(BOT_DIRS, bot_dir, 'inventory')
         for inventory in os.listdir(path):
-            if not inventory.startswith('inventory'):
-                continue
             path_to_inventory = os.path.join(path, inventory)
             if os.path.isdir(path_to_inventory):
                 continue

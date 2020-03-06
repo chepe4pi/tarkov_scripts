@@ -210,3 +210,4 @@ dmypy.json
 .idea/vcs.xml
 
 /db
+/db_old
